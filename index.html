@@ -43,14 +43,15 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{ou
 .sort-group{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--muted)}
 .sort-select{min-height:44px;max-width:150px;padding:9px 28px 9px 12px;border:1px solid var(--line);border-radius:10px;background:white;color:var(--ink);font-size:13px;font-weight:700}
 .result-count{font-size:12px;color:var(--muted);margin:0 0 13px}
-/* The official partner HTML is immutable. Style only these outer containers. */
+/* R010 info cards plus immutable legacy iframe wrappers. */
 .products{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;max-width:752px;margin:0 auto}
 .product{min-width:0;border-radius:14px;background:var(--card);border:1px solid #d8e0e3;box-shadow:var(--shadow);display:flex;flex-direction:column}
 .product:focus-within{outline:2px solid var(--ink);outline-offset:3px}
 .product-head{display:flex;align-items:center;padding:12px 12px 0;min-height:40px}
 .product-number{display:inline-flex;align-items:center;justify-content:center;min-width:48px;height:28px;padding:0 9px;border-radius:7px;background:var(--ink);color:#fff;font-size:14px;line-height:1;font-weight:800;letter-spacing:.05em;font-variant-numeric:tabular-nums}
 .partner-slot{display:flex;align-items:flex-start;justify-content:center;min-height:268px;padding:12px 8px 16px;line-height:0}
-.legacy-card .photo{margin-top:12px}.legacy-card .content{padding:14px 12px}.legacy-card h3{font-size:14px}.legacy-card .cta{font-size:12px}
+.travel-card h3{-webkit-line-clamp:3;min-height:4.2em}.travel-card .photo{margin-top:12px;aspect-ratio:4 / 3}.travel-card .photo img{object-fit:cover}.travel-card .content{padding:12px 12px 14px;gap:8px}.travel-card .address{font-size:12px;color:var(--muted);min-height:2.8em;line-height:1.45;white-space:pre-line;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;word-break:keep-all}.travel-card .cta{min-height:44px;font-size:13px}.legacy-card .photo{margin-top:12px}.legacy-card .content{padding:14px 12px}.legacy-card h3{font-size:14px}.legacy-card .cta{font-size:12px}
+.review-row{display:flex;align-items:center;gap:5px;flex-wrap:wrap;line-height:1.4;margin:2px 0 4px;font-size:12px;word-break:keep-all}.review-stars{display:inline-flex;white-space:nowrap;font-size:15px;letter-spacing:-1px;color:#f28b00;line-height:1}.review-stars .review-half{color:transparent;background:linear-gradient(90deg,#f28b00 50%,#cbd2d6 50%);-webkit-background-clip:text;background-clip:text}.review-stars .review-empty{color:#cbd2d6}.review-label{color:#454d57;font-weight:700}.review-count{color:#236ec2;font-weight:650}.review-row .review-sep{color:#9ea7ad}
 .partner-pending{align-self:center;margin:0;padding:12px 0;color:var(--muted);font-size:12px;line-height:1.6;text-align:center;word-break:keep-all}
 .photo{width:100%;aspect-ratio:1 / 1;background:#f1f3f2;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
 .photo img{width:100%;height:100%;object-fit:contain;background:#fff;display:block}
@@ -195,7 +196,7 @@ footer{display:flex;justify-content:center;flex-wrap:wrap;gap:14px;padding:15px 
     (() => {
       'use strict';
       const source = Array.isArray(window.EOMEOTEM_PRODUCTS) ? window.EOMEOTEM_PRODUCTS : [];
-      // Text metadata is rendered with textContent. The approved partner HTML is checked, then inserted verbatim.
+      // R010 metadata as text nodes, affiliate href stored exactly; old iframe HTML kept verbatim.
       const items = source.filter(item => item && /^\d{3,}$/.test(String(item.id)) && typeof item.name === 'string');
       let visibleCount = 12;
       const desktopPageSize = 12;
@@ -235,7 +236,8 @@ footer{display:flex;justify-content:center;flex-wrap:wrap;gap:14px;padding:15px 
           return parsed.protocol === 'https:' && domains.includes(parsed.hostname) ? parsed.href : null;
         } catch { return null; }
       };
-      const partnerURL = url => outbound(url, ['link.coupang.com', 'coupa.ng']);
+      // Return the EXACT original user string. The destination URL must never be normalized.
+      const partnerURL = url => typeof url === 'string' && outbound(url, ['link.coupang.com', 'coupa.ng']) ? url : null;
       const videoURL = url => outbound(url, ['youtube.com', 'www.youtube.com', 'm.youtube.com', 'youtu.be']);
       const el = (tag, className, text) => {
         const n = document.createElement(tag);
@@ -297,6 +299,70 @@ footer{display:flex;justify-content:center;flex-wrap:wrap;gap:14px;padding:15px 
         } else meta.append(el('span','',`#${data.id}`));
         content.append(meta); outer.append(head,photo,content); return outer;
       }
+      function verifiedProductCard(data) {
+        const outer = el('article', 'product travel-card');
+        outer.setAttribute('aria-label', `상품번호 ${data.id}, ${data.name}`);
+        const head = el('div','product-head');
+        const badge = el('span','product-number',data.id);
+        badge.setAttribute('aria-label', `상품번호 ${data.id}`);
+        head.append(badge);
+        const photo = el('div','photo');
+        // R010: only local verified snapshot. Never hotlink or generate another listing's image.
+        const imageSrc = typeof data.imageUrl === 'string' ? data.imageUrl : '';
+        if (/^\.\/assets\/products\/[0-9]{3,4}\.(?:png|jpe?g|webp)$/i.test(imageSrc) &&
+            imageSrc.includes(`/`+data.id+`.`)) {
+          const img = el('img');
+          img.src = imageSrc;
+          img.alt = `${data.name} 대표 사진`;
+          img.loading = 'lazy'; img.decoding = 'async';
+          img.addEventListener('error', () => photo.replaceChildren(pendingImage()));
+          photo.append(img);
+        } else photo.append(pendingImage());
+        const content = el('div','content');
+        const nameHeading = el('h3','',data.name);
+        nameHeading.title = data.name;
+        content.append(nameHeading);
+        if (data.kind === 'stay') {
+          content.append(el('p','address',typeof data.address === 'string' ? data.address : '주소 확인 중'));
+        }
+        // Reviews are captured from the exact product page at registration time.
+        // No fabricated numerical score; a visual-only rating can render as stars.
+        if (data.kind === 'stay' && typeof data.ratingLabel === 'string' && data.ratingLabel &&
+            Number.isSafeInteger(data.reviewCount) && data.reviewCount >= 0) {
+          const review = el('div','review-row');
+          const visual = Number(data.ratingVisual);
+          if (Number.isFinite(visual) && visual >= 0 && visual <= 5) {
+            const stars = el('span','review-stars');
+            const full = Math.floor(visual);
+            stars.append(document.createTextNode('★'.repeat(full)));
+            const hasHalf = (visual - full) >= 0.25 && (visual - full) < 0.75;
+            if (hasHalf) stars.append(el('span','review-half','★'));
+            const remaining = 5 - full - (hasHalf ? 1 : 0);
+            if (remaining) stars.append(el('span','review-empty','★'.repeat(remaining)));
+            stars.setAttribute('aria-hidden','true');
+            review.append(stars);
+          }
+          review.append(el('span','review-label',data.ratingLabel));
+          review.append(el('span','review-sep','|'));
+          review.append(el('span','review-count',`${data.reviewCount.toLocaleString('ko-KR')}개 상품평`));
+          if (typeof data.reviewCapturedAt === 'string') review.title = `쿠팡 상품평 표시 기준: ${data.reviewCapturedAt}`;
+          content.append(review);
+        }
+        const link = partnerURL(data.affiliateUrl);
+        if (link) {
+          const action = data.kind === 'stay' ? '예약' : '구매';
+          const a = el('a','cta',action);
+          a.setAttribute('href',link); // NEVER use new URL().href or the redirected product URL.
+          a.target = '_blank'; a.rel = 'noopener noreferrer sponsored';
+          a.setAttribute('aria-label',`${data.name}, 쿠팡에서 ${action}`);
+          content.append(a);
+        } else {
+          const b = el('button','cta cta-disabled','링크 확인 중');
+          b.type='button'; b.disabled=true; content.append(b);
+        }
+        outer.append(head,photo,content);
+        return outer;
+      }
       // Parse a detached template for validation only. Never rebuild, trim, or
       // add attributes to the user's partner HTML, and never restyle its iframe.
       function approvedPartnerHTML(raw) {
@@ -320,7 +386,8 @@ footer{display:flex;justify-content:center;flex-wrap:wrap;gap:14px;padding:15px 
         return !frame.textContent.trim();
       }
       function card(data) {
-        // Keep existing products intact until THEIR official HTML is supplied.
+        // Explicit R010 schema comes first; legacy iframe products are never altered.
+        if (data.kind === 'stay' || data.kind === 'general') return verifiedProductCard(data);
         if (!Object.prototype.hasOwnProperty.call(data, 'partnerHtml')) return legacyCard(data);
         const outer = el('article', 'product');
         outer.setAttribute('aria-label', `상품번호 ${data.id}, ${data.name}`);

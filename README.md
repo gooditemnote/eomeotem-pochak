@@ -21,19 +21,30 @@
 - 제휴 고지와 광고·협업 문의 이메일(`smtm1389@gmail.com`) 유지
 - GTM 연결 정보와 기존 `goodnote_search` / `goodnote_view_content` 이벤트 이름은 추적 설정 연결 보호를 위해 유지
 
-## 새 상품 등록
+## 새 상품 등록 (R010 최신 규칙)
 
-`PRODUCT_REGISTRATION_RULES_R009.md`가 실제 신규 등록 규칙입니다. 신규 등록은 `001`부터 시작할 수 있습니다.
+**현재 작업 규칙은 `PRODUCT_REGISTRATION_RULES_R010.md`입니다.** 이전 `R009`는 이력 보존용입니다.
 
-```sh
-python tools/register_product.py --number 001 --partner-html-file /path/to/001.html --dry-run
-python tools/register_product.py --number 001 --partner-html-file /path/to/001.html
+운영자는 다음 형식으로 요청합니다.
+
+```text
+001 상품등록 요청
+https://link.coupang.com/a/ihYHQpOdQy
 ```
 
-- 상품번호와 쿠팡 공식 iframe HTML 원문만 요구합니다.
-- 전달받은 iframe 원문·제휴 URL은 수정하지 않습니다.
-- 신규 등록 시 `products.js`, `partner-html/001.html`이 생성되며 화면에 카드가 자동 반영됩니다.
-- 백업은 사이트 폴더 바깥에 생성합니다.
+- URL 기반 등록기: `tools/register_product_url.py`
+- 기본 자동 수집은 쿠팡 상세 페이지에 접근 가능한 경우에만 동작합니다.
+- 쿠팡이 접근을 제한하거나 대표 썸네일을 검증하지 못하면 **게시를 보류**합니다.
+- 사용자가 발급받은 제휴 링크는 **절대 재작성하지 않습니다.**
+- 필수 항목 검증 완료 후 `products.js`와 `assets/products/`에 등록합니다.
+- 현재 001의 메타데이터(해운대 썬클라우드 호텔·부산 해운대구 해운대해변로 287)는 확인했으나, 정확한 쿠팡 대표 이미지 및 제휴 단축 링크 목적지 확인이 미완료되어 **공개 목록에는 등록하지 않았습니다.** 관련 기록은 `registration-requests/001_PENDING.md`를 참조하세요.
+
+```sh
+python tools/register_product_url.py --number 001 --affiliate-url 'https://link.coupang.com/a/ihYHQpOdQy' --kind stay --dry-run
+python tools/register_product_url.py --number 001 --affiliate-url 'https://link.coupang.com/a/ihYHQpOdQy' --kind stay
+```
+
+공개 등록을 완료한 뒤에는 `상품번호 / 대표 썸네일 / 상품명 / 숙소 주소 / 예약 버튼` 카드로 나타납니다. 위 예시 명령은 네트워크 접근이 가능한 환경과 정상 추출 가능한 상품에서만 성공합니다.
 
 ## 참고 및 배포 주의
 
@@ -44,3 +55,15 @@ python tools/register_product.py --number 001 --partner-html-file /path/to/001.h
 - 그 외 `R004`~`R011` 문서, 2026-10-30 검색·페이지네이션 보고서 등은 **이전 '좋은물건노트' 작업 당시 기록**이며 새로운 어머템포착의 실제 상품 목록을 의미하지 않습니다.
 - **도메인/기존 GitHub 저장소 이름은 ZIP 변경만으로 바뀌지 않습니다.** 새 사이트 저장소·GitHub Pages 설정 및 커스텀 도메인 연결은 따로 진행해야 합니다.
 - 기존 사이트 저장소에 이 ZIP을 덮어씌우면 이전 상품 파일이 그대로 남을 수 있습니다. 신규 빈 저장소에 배포하거나, 이전 상품 HTML·영상 파일을 명시적으로 제거해야 합니다.
+
+
+## R010 등록현황 (2026-10-31)
+
+- `001` 해운대 썬클라우드 호텔을 `products.js`에 등록함.
+- 리뷰 정보: `훌륭함`, `398개 상품평` (사용자가 제공한 2026-10-31 쿠팡 페이지 화면 기준).
+- 썸네일: 사용자 제공 화면의 첫 갤러리 사진을 잘라 만든 로컬 이미지(`assets/products/001.jpg`). 고화질 공식 파일을 직접 다운로드한 것은 아님.
+- 주소·위치 설명은 단일 항목에 줄바꿈으로 표시함.
+- 예약 링크는 제공된 쿠팡 제휴 URL 원문 그대로 저장하고, 별도 파일(`affiliate-links/001.txt`)과 데이터 일치를 검증함.
+- 모바일 2열/10개 페이지네이션, 데스크톱 4열/12개 더보기, `1` 또는 `001` 검색 등 기존 기능을 유지하도록 코드를 변경함.
+- 현재 상태는 **ZIP 전달용 로컬 작업본**, GitHub Pages 배포 전.
+- 기술적인 쿠팡 링크 자동 수집이 차단되는 경우, 추측하지 않고 사용자 제공 쿠팡 화면과 실제 이미지 증빙을 사용한 검증 등록 경로를 이용함.
