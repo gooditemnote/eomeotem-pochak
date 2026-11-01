@@ -50,7 +50,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{ou
 .product-head{display:flex;align-items:center;padding:12px 12px 0;min-height:40px}
 .product-number{display:inline-flex;align-items:center;justify-content:center;min-width:48px;height:28px;padding:0 9px;border-radius:7px;background:var(--ink);color:#fff;font-size:14px;line-height:1;font-weight:800;letter-spacing:.05em;font-variant-numeric:tabular-nums}
 .partner-slot{display:flex;align-items:flex-start;justify-content:center;min-height:268px;padding:12px 8px 16px;line-height:0}
-.travel-card h3{-webkit-line-clamp:3;min-height:4.2em}.travel-card .photo{margin-top:12px;aspect-ratio:4 / 3}.travel-card .photo img{object-fit:cover}.travel-card .content{padding:12px 12px 14px;gap:8px}.travel-card .address{font-size:12px;color:var(--muted);min-height:2.8em;line-height:1.45;white-space:pre-line;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;word-break:keep-all}.travel-card .cta{min-height:44px;font-size:13px}.legacy-card .photo{margin-top:12px}.legacy-card .content{padding:14px 12px}.legacy-card h3{font-size:14px}.legacy-card .cta{font-size:12px}
+.travel-card h3{font-size:16px;line-height:1.43;font-weight:790;-webkit-line-clamp:3;min-height:4.2em}.travel-card .photo{margin-top:12px;aspect-ratio:4 / 3}.travel-card .photo img{object-fit:cover}.travel-card .content{padding:12px 12px 14px;gap:8px}.travel-card .address{font-size:12px;color:var(--muted);min-height:2.8em;line-height:1.45;white-space:pre-line;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;word-break:keep-all}.travel-card .cta{min-height:44px;font-size:13px}.legacy-card .photo{margin-top:12px}.legacy-card .content{padding:14px 12px}.legacy-card h3{font-size:14px}.legacy-card .cta{font-size:12px}
 .review-row{display:flex;align-items:center;gap:5px;flex-wrap:wrap;line-height:1.4;margin:2px 0 4px;font-size:12px;word-break:keep-all}.review-stars{display:inline-flex;white-space:nowrap;font-size:15px;letter-spacing:-1px;color:#f28b00;line-height:1}.review-stars .review-half{color:transparent;background:linear-gradient(90deg,#f28b00 50%,#cbd2d6 50%);-webkit-background-clip:text;background-clip:text}.review-stars .review-empty{color:#cbd2d6}.review-label{color:#454d57;font-weight:700}.review-count{color:#236ec2;font-weight:650}.review-row .review-sep{color:#9ea7ad}
 .partner-pending{align-self:center;margin:0;padding:12px 0;color:var(--muted);font-size:12px;line-height:1.6;text-align:center;word-break:keep-all}
 .photo{width:100%;aspect-ratio:1 / 1;background:#f1f3f2;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
@@ -333,12 +333,14 @@ footer{display:flex;justify-content:center;flex-wrap:wrap;gap:14px;padding:15px 
         const nameHeading = el('h3','',data.name);
         nameHeading.title = data.name;
         content.append(nameHeading);
-        if (data.kind === 'stay') {
-          content.append(el('p','address',typeof data.address === 'string' ? data.address : '주소 확인 중'));
+        // Location applies to verified travel admissions as well as lodgings.
+        // Ordinary physical goods remain address-free when no verified address is provided.
+        if (typeof data.address === 'string' && data.address.trim()) {
+          content.append(el('p','address',data.address));
         }
         // Reviews are captured from the exact product page at registration time.
         // No fabricated numerical score; a visual-only rating can render as stars.
-        if (data.kind === 'stay' && typeof data.ratingLabel === 'string' && data.ratingLabel &&
+        if (typeof data.ratingLabel === 'string' && data.ratingLabel &&
             Number.isSafeInteger(data.reviewCount) && data.reviewCount >= 0) {
           const review = el('div','review-row');
           const visual = Number(data.ratingVisual);

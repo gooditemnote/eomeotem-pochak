@@ -16,10 +16,14 @@ window.EOMEOTEM_PRODUCTS = [
   {
     "id": "002",
     "name": "[경주] [쿠팡와우] 경주월드 종일 패밀리권 특가",
-    "address": "",
+    "address": "경상북도 경주시 보문로 544\n경주월드 (천군동)",
     "kind": "general",
     "imageUrl": "https://thumbnail.coupangcdn.com/thumbnails/remote/400x200q60crop200x200/image/travelSeller/common/A00197835/d01e805d-7ef3-4013-8bf7-ad7c56745d31.jpg",
     "affiliateUrl": "https://link.coupang.com/a/ijQ2dYWwCG",
-    "publishedAt": "2026-11-01"
+    "publishedAt": "2026-11-01",
+    "ratingLabel": "최고",
+    "reviewCount": 1154,
+    "reviewCapturedAt": "2026-11-01",
+    "ratingVisual": 5
   }
 ];

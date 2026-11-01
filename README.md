@@ -79,7 +79,14 @@ python tools/register_product_url.py --number 001 --affiliate-url 'https://link.
 ## R012 002 상품등록 현황 (2026-11-01)
 
 - 실제 제휴 리디렉션과 쿠팡 트래블 상품 정보 확인 후 002 경주월드 종일 패밀리권 등록.
-- 상품 유형은 놀이공원 티켓이므로 `general` 및 `구매` 버튼 사용, 숙소 주소·예약 버튼 오표시 방지.
+- 상품 유형은 놀이공원 티켓이므로 `general` 및 `구매` 버튼 사용. 실제 방문 장소의 주소와 확인된 상품평은 숙소 카드처럼 표시.
 - 원본 제휴 URL `https://link.coupang.com/a/ijQ2dYWwCG` 고정.
 - 대표 이미지가 공식 CDN의 원격 주소를 사용한다는 제한을 명시. 이미지 미노출 시 대체 안내가 뜨도록 처리.
 - `registration-requests/002_REGISTERED.md`에 증빙과 제한사항, `R012_002_REGISTRATION_VERIFICATION.md`에 검증 요약 저장.
+
+## R013 002 카드 스타일·정보 일치 수정 (2026-11-01)
+
+- `index.html`: 숙소 유형만 주소·상품평을 그리는 제약 수정. 검증된 여행 티켓 주소·상품평을 001과 동일한 `travel-card` 마크업/CSS로 표시.
+- `products.js` 002에 경주월드 주소, `최고`, `★★★★★`, `1,154개 상품평` (2026-11-01 쿠팡 상세 조회 기준) 필드 추가.
+- 001 데이터·대표 사진과 양쪽 쿠팡 제휴 URL은 원문 보존.
+- 오프라인 브라우저 검증과 상품 정보 출처 및 제한사항은 `R012_002_REGISTRATION_VERIFICATION.md`에 기록.
