@@ -307,14 +307,25 @@ footer{display:flex;justify-content:center;flex-wrap:wrap;gap:14px;padding:15px 
         badge.setAttribute('aria-label', `상품번호 ${data.id}`);
         head.append(badge);
         const photo = el('div','photo');
-        // R010: only local verified snapshot. Never hotlink or generate another listing's image.
+        // R010: local verified snapshot preferred. R012: exact-page verified Coupang
+        // Travel CDN thumbnail is temporarily allowed when local capture is unavailable.
         const imageSrc = typeof data.imageUrl === 'string' ? data.imageUrl : '';
-        if (/^\.\/assets\/products\/[0-9]{3,4}\.(?:png|jpe?g|webp)$/i.test(imageSrc) &&
-            imageSrc.includes(`/`+data.id+`.`)) {
+        const localVerifiedImage = /^\.\/assets\/products\/[0-9]{3,4}\.(?:png|jpe?g|webp)$/i.test(imageSrc) &&
+          imageSrc.includes(`/`+data.id+`.`);
+        const officialTravelImage = (() => {
+          try {
+            const url = new URL(imageSrc);
+            return url.protocol === 'https:' && url.hostname === 'thumbnail.coupangcdn.com' &&
+              url.pathname.startsWith('/thumbnails/remote/') &&
+              /\.(?:png|jpe?g|webp)$/i.test(url.pathname);
+          } catch { return false; }
+        })();
+        if (localVerifiedImage || officialTravelImage) {
           const img = el('img');
           img.src = imageSrc;
           img.alt = `${data.name} 대표 사진`;
           img.loading = 'lazy'; img.decoding = 'async';
+          if (officialTravelImage) img.referrerPolicy = 'no-referrer';
           img.addEventListener('error', () => photo.replaceChildren(pendingImage()));
           photo.append(img);
         } else photo.append(pendingImage());

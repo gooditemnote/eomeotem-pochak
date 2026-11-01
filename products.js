@@ -12,5 +12,14 @@ window.EOMEOTEM_PRODUCTS = [
     "reviewCount": 398,
     "reviewCapturedAt": "2026-10-31",
     "ratingVisual": 4.5
+  },
+  {
+    "id": "002",
+    "name": "[경주] [쿠팡와우] 경주월드 종일 패밀리권 특가",
+    "address": "",
+    "kind": "general",
+    "imageUrl": "https://thumbnail.coupangcdn.com/thumbnails/remote/400x200q60crop200x200/image/travelSeller/common/A00197835/d01e805d-7ef3-4013-8bf7-ad7c56745d31.jpg",
+    "affiliateUrl": "https://link.coupang.com/a/ijQ2dYWwCG",
+    "publishedAt": "2026-11-01"
   }
 ];
