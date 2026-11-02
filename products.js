@@ -25,5 +25,18 @@ window.EOMEOTEM_PRODUCTS = [
     "reviewCount": 1154,
     "reviewCapturedAt": "2026-11-01",
     "ratingVisual": 5
+  },
+  {
+    "id": "003",
+    "name": "[본사직영] 호텔 탑스텐 정동진",
+    "address": "강원특별자치도 강릉시 옥계면 헌화로 455-34\n동해 바다 전망 객실 선택 가능",
+    "kind": "stay",
+    "imageUrl": "https://thumbnail.coupangcdn.com/thumbnails/remote/400x200q60crop200x200/image/travelSeller/hotel/A01437486/87dc8b35-b148-415c-b564-c7a06d985b91.png",
+    "affiliateUrl": "https://link.coupang.com/a/ilicdLAy1Q",
+    "publishedAt": "2026-11-02",
+    "ratingLabel": "매우 좋음",
+    "reviewCount": 117,
+    "reviewCapturedAt": "2026-11-02",
+    "ratingVisual": 4.0
   }
 ];
