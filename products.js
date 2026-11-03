@@ -38,5 +38,18 @@ window.EOMEOTEM_PRODUCTS = [
     "reviewCount": 117,
     "reviewCapturedAt": "2026-11-02",
     "ratingVisual": 4.0
+  },
+  {
+    "id": "004",
+    "name": "서머셋팰리스 서울",
+    "address": "서울특별시 종로구 율곡로2길 7\n경복궁·안국역 인근",
+    "kind": "stay",
+    "imageUrl": "https://image.coupangcdn.com/image/resized_image/thumbnails/remote/1180x2360q60crop1180x630/image/travelConnect/hotel/A00160447/f5c1f99f-162e-4e6d-8be9-0a1ad52b7bf2.jpg",
+    "affiliateUrl": "https://link.coupang.com/a/im5kgY5AqG",
+    "publishedAt": "2026-11-03",
+    "ratingLabel": "훌륭함",
+    "reviewCount": 151,
+    "reviewCapturedAt": "2026-11-03",
+    "ratingVisual": 4.5
   }
 ];
