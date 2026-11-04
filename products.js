@@ -51,5 +51,18 @@ window.EOMEOTEM_PRODUCTS = [
     "reviewCount": 151,
     "reviewCapturedAt": "2026-11-03",
     "ratingVisual": 4.5
+  },
+  {
+    "id": "005",
+    "name": "서울랜드 종일/어린이/AFTER2 파크이용권",
+    "address": "경기도 과천시 광명로 181\n서울랜드 테마파크",
+    "kind": "general",
+    "imageUrl": "",
+    "affiliateUrl": "https://link.coupang.com/a/ioLolEuBps",
+    "publishedAt": "2026-11-04",
+    "ratingLabel": "최고",
+    "reviewCount": 2205,
+    "reviewCapturedAt": "2026-11-04",
+    "ratingVisual": 5.0
   }
 ];
