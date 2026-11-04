@@ -326,13 +326,25 @@ footer{display:flex;justify-content:center;flex-wrap:wrap;gap:14px;padding:15px 
               /\.(?:png|jpe?g|webp)$/i.test(url.pathname);
           } catch { return false; }
         })();
+        // 005: Coupang's first gallery image filename confirmed in browser.
+        // The complete CDN path was reconstructed from the standard Coupang Travel pattern.
+        // It has NOT been independently fetched here; retain the prior CC0 fallback when remote loading fails.
+        const seoulLandFallback = data.id === '005' && imageSrc === 'https://image.coupangcdn.com/image/resized_image/thumbnails/remote/1180x2360q60crop1180x630/image/travelSeller/common/A00186371/1ebcc0a0-8b20-4b8d-8f42-c0efe1ca0234.jpg'
+          ? 'https://thumb.wikimedia.org/wikipedia/commons/thumb/4/42/2015%EB%85%84_5%EC%9B%94_5%EC%9D%BC_%EC%84%9C%EC%9A%B8%EB%9E%9C%EB%93%9C_%EC%A0%84%EA%B2%BD_DSC09925.jpg/960px-2015%EB%85%84_5%EC%9B%94_5%EC%9D%BC_%EC%84%9C%EC%9A%B8%EB%9E%9C%EB%93%9C_%EC%A0%84%EA%B2%BD_DSC09925.jpg' : '';
         if (localVerifiedImage || officialTravelImage) {
           const img = el('img');
           img.src = imageSrc;
           img.alt = `${data.name} 대표 사진`;
           img.loading = 'lazy'; img.decoding = 'async';
           if (officialTravelImage) img.referrerPolicy = 'no-referrer';
-          img.addEventListener('error', () => photo.replaceChildren(pendingImage()));
+          img.addEventListener('error', () => {
+            if (seoulLandFallback && !img.dataset.usedFallback) {
+              img.dataset.usedFallback = 'yes';
+              img.src = seoulLandFallback;
+              return;
+            }
+            photo.replaceChildren(pendingImage());
+          });
           photo.append(img);
         } else photo.append(pendingImage());
         const content = el('div','content');

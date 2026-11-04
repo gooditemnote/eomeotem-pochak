@@ -114,3 +114,25 @@ python tools/register_product_url.py --number 001 --affiliate-url 'https://link.
 - 기존 001~003 상품 데이터 및 원문 제휴 링크 유지.
 - 상세 제한·출처: `R015_004_REGISTRATION_VERIFICATION.md` 참조.
 - GitHub Pages는 이 ZIP만으로 변경되지 않음.
+
+
+## R017 — 005 사진 표시 개선 (2026-11-04)
+
+- 쿠팡 갤러리 첫 이미지 파일명 `1ebcc0a0-8b20-4b8d-8f42-c0efe1ca0234.jpg`은 크롬 GPT 브라우저 연결에서 확인됨. 다만 연결이 URL 전체와 실제 파일 바이트를 제공하지 않아 동일 이미지 확보/비교는 **미완료**.
+- 그래서 005 카드에만 실제 서울랜드 전경을 촬영한 **별도 CC0 대체 사진**을 지정. 상품 원본 이미지라고 주장하지 않음.
+- 대체 사진: 2015-05-05, 최광모 촬영, Wikimedia Commons, 퍼블릭 도메인 CC0 1.0. https://commons.wikimedia.org/wiki/File:2015년_5월_5일_서울랜드_전경_DSC09925.jpg
+- 외부 Wikimedia 썸네일 URL을 사용. 오프라인 렌더 테스트에서 원격 HTTP 로드는 검증 불가. 연결 제한 시 기본 `실제 사진 준비 중` 안내로 되돌아감.
+- 001~004 데이터와 제휴 링크, 005 제휴 URL, 상품 검색/레이아웃은 변경하지 않음.
+- 상품사진 원본이 확보되면 005 imageUrl과 예외분기만 정리하여 교체 권장.
+
+
+# R018 — 005 서울랜드 쿠팡 이미지 경로 적용 (2026-11-04)
+
+- 사용자 제공 주소는 `https://image.coupangcdn.com/image/resized_image/t…00186371/1ebcc0a0-8b20-4b8d-8f42-c0efe1ca0234.jpg`처럼 중간 경로가 생략된 형태였습니다.
+- 크롬에서 확인된 서울랜드 상품(30000001063207) 갤러리 **첫 사진 파일명**은 `1ebcc0a0-8b20-4b8d-8f42-c0efe1ca0234.jpg`입니다.
+- **경로 추정 복원**: 기존 쿠팡 트래블 ticket 갤러리 URL 패턴(`travelSeller/common/A...`)을 사용하여 다음 URL을 조립했습니다.
+  `https://image.coupangcdn.com/image/resized_image/thumbnails/remote/1180x2360q60crop1180x630/image/travelSeller/common/A00186371/1ebcc0a0-8b20-4b8d-8f42-c0efe1ca0234.jpg`
+- 주의: 파일명을 실제 쿠팡 페이지와 대조했지만, **생략된 전체 경로 및 해당 CDN URL의 HTTP/이미지 응답을 검증하지 못했습니다.** 따라서 쿠팡 공식 이미지 적용은 원격 접속 시 성공 여부를 확인해야 합니다.
+- 원격 이미지에 에러가 나면 이전 CC0 대체사진으로 돌아가며, 그마저 실패하면 `실제 사진 준비 중`을 표시합니다. 대체사진은 쿠팡 이미지와 동일하지 않습니다.
+- 상품 ID·주소·명칭·리뷰·001~005 모든 제휴 URL은 변경하지 않았습니다.
+- GitHub Pages 배포는 수행하지 않았습니다.
