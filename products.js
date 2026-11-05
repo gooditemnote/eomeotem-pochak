@@ -64,5 +64,17 @@ window.EOMEOTEM_PRODUCTS = [
     "reviewCount": 2205,
     "reviewCapturedAt": "2026-11-04",
     "ratingVisual": 5.0
+  },
+  {
+    "id": "006",
+    "name": "[대마도승선권+호텔] 노바호 왕복 승선권 + 토요코인 호텔 자유여행",
+    "address": "부산광역시 동구 충장대로 206\n부산항 출발 · 대마도 토요코인 1박/2박",
+    "kind": "stay",
+    "imageUrl": "https://image.coupangcdn.com/image/resized_image/thumbnails/remote/1180x2360q60crop1180x630/image/travelSeller/common/A00222540/800f310d-d39f-4968-85de-4f474185428b.png",
+    "affiliateUrl": "https://link.coupang.com/a/iqojkx12Zg",
+    "publishedAt": "2026-11-05",
+    "ratingLabel": "훌륭함",
+    "reviewCount": 19,
+    "reviewCapturedAt": "2026-11-05"
   }
 ];
